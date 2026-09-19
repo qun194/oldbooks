@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OldBooks - Tiệm Sách Cũ Trực Tuyến</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <i class="fa-solid fa-book-open"></i> OldBooks
+    </div>
+    <nav class="nav-links">
+      <button class="nav-btn active" data-target="home-section"><i class="fa-solid fa-house"></i> Trang chủ</button>
+      <button class="nav-btn" data-target="catalog-section"><i class="fa-solid fa-book"></i> Mục sách</button>
+      <button class="nav-btn" data-target="cart-section">
+        <i class="fa-solid fa-cart-shopping"></i> Mua sách
+        <span class="cart-badge" id="cart-count">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- PHẦN 1: TRANG CHỦ -->
+    <section id="home-section" class="tab-content active">
+      <div class="hero">
+        <h1>Tiệm Sách Cũ OldBooks</h1>
+        <p>Trao gửi tri thức - Lọc chọn cẩn thận - Giá cả hợp lý</p>
+        <button class="btn btn-primary" onclick="switchTab('catalog-section')">
+          <i class="fa-solid fa-magnifying-glass"></i> Khám phá tủ sách ngay
+        </button>
+      </div>
+
+      <div class="features">
+        <div class="feature-card">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+          <h3>Sách Chọn Lọc</h3>
+          <p>Mỗi cuốn sách đều được kiểm tra kỹ lưỡng về tình trạng trước khi đăng bán.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-piggy-bank"></i>
+          <h3>Tiết Kiệm Chi Phí</h3>
+          <p>Sở hữu sách hay với mức giá nhượng lại cực kỳ ưu đãi chỉ từ 15k, 30k.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-bolt"></i>
+          <h3>Thanh Toán QR Nhanh</h3>
+          <p>Chuyển khoản tiện lợi qua mã QR Zalo/Ngân hàng tự động điền thông tin.</p>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2><i class="fa-solid fa-fire"></i> Sách Nổi Bật</h2>
+      </div>
+      <div class="book-grid" id="featured-books"></div>
+    </section>
+
+    <!-- PHẦN 2: MỤC SÁCH -->
+    <section id="catalog-section" class="tab-content">
+      <div class="filter-bar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="Tìm tên sách, tác giả...">
+        </div>
+        <select id="category-filter">
+          <option value="all">Tất cả thể loại</option>
+          <option value="van-hoc">Văn học</option>
+          <option value="tieng-anh">Ngoại ngữ / Tiếng Anh</option>
+          <option value="sgk">Sách giáo khoa / Tham khảo</option>
+        </select>
+      </div>
+
+      <div class="book-grid" id="catalog-books"></div>
+    </section>
+
+    <!-- PHẦN 3: MUA SÁCH (GIỎ HÀNG & THANH TOÁN) -->
+    <section id="cart-section" class="tab-content">
+      <div class="checkout-layout">
+        
+        <!-- Cột trái: Giỏ hàng -->
+        <div class="cart-details">
+          <h2><i class="fa-solid fa-basket-shopping"></i> Danh sách sách đã chọn</h2>
+          <div id="cart-items-container">
+            <!-- Render từ JS -->
+          </div>
+          <div class="cart-summary">
+            <span>Tổng cộng:</span>
+            <strong id="cart-total-price">0 VNĐ</strong>
+          </div>
+        </div>
+
+        <!-- Cột phải: Form nhập thông tin & Mã QR -->
+        <div class="checkout-details">
+          <h2><i class="fa-solid fa-user-check"></i> Thông tin mua hàng</h2>
+          
+          <form id="checkout-form" onsubmit="handleCheckout(event)">
+            <div class="form-group">
+              <label><i class="fa-solid fa-user"></i> Họ và tên người nhận</label>
+              <input type="text" id="cust-name" required placeholder="Ví dụ: Nguyễn Văn A">
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-location-dot"></i> Địa chỉ nhận hàng</label>
+              <input type="text" id="cust-address" required placeholder="Số nhà, đường, xóm/thôn, xã/phường, tỉnh/thành">
+            </div>
+
+            <div class="form-group">
+              <label><i class="fa-solid fa-phone"></i> Số Zalo liên hệ</label>
+              <input type="tel" id="cust-zalo" pattern="[0-9]{10,11}" required placeholder="Ví dụ: 0912345678">
+            </div>
+
+            <button type="submit" class="btn btn-success" id="btn-submit-order">
+              <i class="fa-solid fa-qrcode"></i> Xác nhận & Lấy mã QR Chuyển khoản
+            </button>
+          </form>
+
+          <!-- Khu vực QR hiển thị sau khi nhập form -->
+          <div id="qr-payment-area" class="qr-box hidden">
+            <h3><i class="fa-solid fa-circle-check"></i> Tạo đơn hàng thành công!</h3>
+            <p class="qr-sub">Vui lòng quét mã QR dưới đây để hoàn tất thanh toán:</p>
+
+            <div class="qr-image-wrapper">
+              <!-- Bạn tải ảnh QR của bạn lên GitHub và đặt tên là qr-bank.jpg -->
+              <img src="qr-bank.jpg" alt="Mã QR Chuyển Khoản TRAN LE QUANG">
+            </div>
+
+            <div class="transfer-info">
+              <p><strong>Chủ tài khoản:</strong> TRAN LE QUANG</p>
+              <p><strong>Số tiền:</strong> <span id="qr-amount" class="highlight-price">0 VNĐ</span></p>
+              <p><strong>Nội dung chuyển khoản (Bắt buộc):</strong></p>
+              <div class="copy-code-box">
+                <code id="transfer-content">---</code>
+                <button onclick="copyTransferContent()"><i class="fa-solid fa-copy"></i> Sao chép</button>
+              </div>
+            </div>
+
+            <div class="alert-info">
+              <i class="fa-solid fa-info-circle"></i> Sau khi chuyển khoản xong, shop sẽ gửi tin nhắn xác nhận đơn qua số Zalo bạn vừa cung cấp!
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 OldBooks - Tiệm sách cũ chọn lọc. Kết nối đam mê đọc sách.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
